@@ -1,0 +1,7 @@
+﻿Raices por el metodo de la secante
+Biseccion
+jacobi
+Serie de taylor
+punto fijo
+Maclurit
+Newthon rapson

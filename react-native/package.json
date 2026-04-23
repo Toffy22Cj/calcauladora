@@ -1,0 +1,59 @@
+{
+  "name": "super-calculadora",
+  "version": "1.0.0",
+  "main": "expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "build": "expo build:web",
+    "build:android": "expo build:android",
+    "build:ios": "expo build:ios",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf node_modules .expo .expo-shared",
+    "reset": "npm run clean && npm install"
+  },
+  "dependencies": {
+    "expo": "~51.0.0",
+    "expo-status-bar": "~1.12.1",
+    "react": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-safe-area-context": "4.10.5",
+    "react-native-screens": "~3.31.1",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/native-stack": "^6.11.0",
+    "@react-navigation/bottom-tabs": "^6.6.1",
+    "react-native-vector-icons": "^10.1.0",
+    "react-native-chart-kit": "^6.12.0",
+    "react-native-svg": "^15.6.0",
+    "axios": "^1.7.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/react": "~18.2.45",
+    "@types/react-native": "~0.73.0",
+    "typescript": "~5.3.3",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-expo": "^7.0.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-native": "^4.1.0",
+    "prettier": "^3.2.5",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
+  },
+  "private": true,
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}
