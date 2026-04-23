@@ -131,8 +131,11 @@ export const calculatorUtils = {
         break;
 
       case 'jacobi':
-        if (!params.A || !params.b) {
-          return { valid: false, error: 'Se requieren A y b' };
+        if (params.parserError) {
+          return { valid: false, error: params.parserError };
+        }
+        if (!params.A || !params.b || params.A.length === 0) {
+          return { valid: false, error: 'Por favor, ingresa el sistema de ecuaciones' };
         }
         break;
     }

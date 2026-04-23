@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { MethodInfo, MethodParams } from '../types';
+import { parseLinearEquations } from '../utils/equationParser';
 
 interface InputFormProps {
   methodKey: string;
@@ -74,6 +75,37 @@ const InputForm: React.FC<InputFormProps> = ({
     );
   };
 
+  const renderJacobiInput = () => {
+    return (
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Sistema de Ecuaciones (una por línea)</Text>
+        <TextInput
+          style={[styles.input, styles.multilineInput, { minHeight: 100 }]}
+          placeholder={"5x + y = 12\n2x + 3y = 40"}
+          value={params.equationsText as string || ''}
+          onChangeText={(text) => {
+            const parsed = parseLinearEquations(text);
+            onParamsChange({
+              ...params,
+              equationsText: text,
+              A: parsed.error ? undefined : parsed.A,
+              b: parsed.error ? undefined : parsed.b,
+              parserError: parsed.error
+            });
+          }}
+          multiline={true}
+          numberOfLines={5}
+          placeholderTextColor="#9ca3af"
+        />
+        {params.parserError && params.equationsText ? (
+          <Text style={{ color: '#ef4444', fontSize: 12, marginTop: 4 }}>{params.parserError}</Text>
+        ) : params.A && params.equationsText ? (
+          <Text style={{ color: '#10b981', fontSize: 12, marginTop: 4 }}>✓ Sistema convertido a matriz exitosamente</Text>
+        ) : null}
+      </View>
+    );
+  };
+
   const renderMethodSpecificInputs = () => {
     switch (methodKey) {
       case 'biseccion':
@@ -122,8 +154,7 @@ const InputForm: React.FC<InputFormProps> = ({
       case 'jacobi':
         return (
           <>
-            {renderInput('A', 'Matriz A', '[[4, -1], [4, -8]]', 'default', true)}
-            {renderInput('b', 'Vector b', '[7, -21]', 'default', true)}
+            {renderJacobiInput()}
             {renderInput('x0', 'Aproximación inicial (opcional)', '', 'default', true)}
             {renderInput('tolerance', 'Tolerancia', '1e-10', 'numeric')}
             {renderInput('max_iterations', 'Número de iteraciones', '1000', 'numeric')}

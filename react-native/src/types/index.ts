@@ -51,7 +51,10 @@ export interface MethodParams {
   g?: string; // Función de iteración
   f_prime?: string; // Derivada
   A?: number[][]; // Matriz para sistemas
-  vector_b?: number[]; // Vector para sistemas
+  vector_b?: number[]; // Vector para sistemas (unused but kept for compatibility)
+  b?: number[]; // Vector b for systems
+  equationsText?: string;
+  parserError?: string;
   tolerance?: number;
   max_iterations?: number;
   n_terms?: number;
