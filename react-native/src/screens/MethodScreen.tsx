@@ -26,18 +26,21 @@ const MethodScreen: React.FC<MethodScreenProps> = () => {
   const navigation = useNavigation<MethodScreenNavigationProp>();
 
   const methodInfo = route.params?.method;
-  const methodKey = methodInfo ? Object.keys(methods).find(key => methods[key] === methodInfo) || '' : '';
+  const methodKey = route.params?.methodKey || 
+    (methodInfo ? Object.keys(methods).find(key => methods[key].name === methodInfo.name) || '' : '');
   const [params, setParams] = useState<MethodParams>({});
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleSolve = async () => {
     if (!methodKey) return;
+    setErrorMsg(null);
 
     // Validar parámetros
     const validation = calculatorUtils.validateParams(methodKey, params);
     if (!validation.valid) {
-      Alert.alert('Error', validation.error);
+      setErrorMsg(validation.error || 'Parámetros inválidos');
       return;
     }
 
@@ -47,11 +50,11 @@ const MethodScreen: React.FC<MethodScreenProps> = () => {
       if (response.success && response.data) {
         setResult(response.data);
       } else {
-        Alert.alert('Error', response.error || 'Error en el cálculo');
+        setErrorMsg(response.error || 'Error en el cálculo (verifica la sintaxis de la ecuación)');
       }
     } catch (error) {
       console.error('Error solving:', error);
-      Alert.alert('Error', 'No se pudo conectar con el servidor');
+      setErrorMsg('No se pudo conectar con el servidor');
     } finally {
       setLoading(false);
     }
@@ -60,6 +63,7 @@ const MethodScreen: React.FC<MethodScreenProps> = () => {
   const handleClear = () => {
     setParams({});
     setResult(null);
+    setErrorMsg(null);
   };
 
   const getMethodExamples = (method: string): MethodParams => {
@@ -142,6 +146,12 @@ const MethodScreen: React.FC<MethodScreenProps> = () => {
           onClear={handleClear}
         />
 
+        {errorMsg && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{errorMsg}</Text>
+          </View>
+        )}
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.solveButton, loading && styles.disabledButton]}
@@ -222,6 +232,20 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  errorContainer: {
+    backgroundColor: '#fee2e2',
+    borderWidth: 1,
+    borderColor: '#ef4444',
+    borderRadius: 8,
+    padding: 12,
+    marginVertical: 12,
+  },
+  errorText: {
+    color: '#b91c1c',
+    fontSize: 14,
+    textAlign: 'center',
+    fontWeight: '500',
   },
 });
 

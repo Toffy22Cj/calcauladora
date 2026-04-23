@@ -11,6 +11,16 @@ function newton.solve(f, f_prime, x0, tolerance, max_iterations)
     tolerance = tolerance or utils.EPSILON
     max_iterations = max_iterations or utils.MAX_ITERATIONS
 
+    -- Autocompletar x0 si falta
+    if not x0 then
+        local a, b = utils.find_bracket(f)
+        if a and b then
+            x0 = (a + b) / 2
+        else
+            return nil, "No se encontró un x0 automáticamente. Por favor ingresa x0 manualmente."
+        end
+    end
+
     -- Validar parámetros
     if not utils.is_function(f) then
         return nil, "f debe ser una función"
@@ -40,6 +50,8 @@ function newton.solve(f, f_prime, x0, tolerance, max_iterations)
         -- Calcular siguiente aproximación
         local xn_new = xn - fxn / fpxn
         local error = utils.abs(xn_new - xn)
+        
+        local details = "Pendiente (tangente): "..utils.round(fpxn, 4)..". Intersección con eje X en x="..utils.round(xn_new, 4)
 
         -- Guardar iteración
         table.insert(iterations, {
@@ -48,7 +60,8 @@ function newton.solve(f, f_prime, x0, tolerance, max_iterations)
             f_x = fxn,
             f_prime_x = fpxn,
             x_new = xn_new,
-            error = error
+            error = error,
+            details = details
         })
 
         -- Criterio de parada

@@ -104,29 +104,29 @@ export const calculatorUtils = {
   validateParams: (method: string, params: MethodParams): { valid: boolean; error?: string } => {
     switch (method) {
       case 'biseccion':
-        if (!params.f || params.a === undefined || params.b === undefined) {
-          return { valid: false, error: 'Se requieren f, a, y b' };
+        if (!params.f) {
+          return { valid: false, error: 'Se requiere la ecuación f' };
         }
-        if (params.a >= params.b) {
+        if (params.a !== undefined && params.b !== undefined && params.a >= params.b) {
           return { valid: false, error: 'a debe ser menor que b' };
         }
         break;
 
       case 'newton_raphson':
-        if (!params.f || !params.f_prime || params.x0 === undefined) {
-          return { valid: false, error: 'Se requieren f, f_prime, y x0' };
+        if (!params.f || !params.f_prime) {
+          return { valid: false, error: 'Se requieren las ecuaciones f y f\'' };
         }
         break;
 
       case 'secante':
-        if (!params.f || params.x0 === undefined || params.x1 === undefined) {
-          return { valid: false, error: 'Se requieren f, x0, y x1' };
+        if (!params.f) {
+          return { valid: false, error: 'Se requiere la ecuación f' };
         }
         break;
 
       case 'punto_fijo':
-        if (!params.g || params.x0 === undefined) {
-          return { valid: false, error: 'Se requieren g y x0' };
+        if (!params.g) {
+          return { valid: false, error: 'Se requiere la ecuación g' };
         }
         break;
 

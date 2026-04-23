@@ -79,33 +79,33 @@ const InputForm: React.FC<InputFormProps> = ({
       case 'biseccion':
         return (
           <>
-            {renderInput('f', 'Función f(x)', 'x^2 - 2', 'default', true)}
-            {renderInput('a', 'Límite inferior (a)', '1', 'numeric')}
-            {renderInput('b', 'Límite superior (b)', '2', 'numeric')}
+            {renderInput('f', 'Ecuación f(x)', 'x^2 - 2', 'default', true)}
+            {renderInput('a', 'Límite inferior (a) (opcional)', '1', 'numeric')}
+            {renderInput('b', 'Límite superior (b) (opcional)', '2', 'numeric')}
             {renderInput('tolerance', 'Tolerancia', '1e-10', 'numeric')}
-            {renderInput('max_iterations', 'Máx. iteraciones', '1000', 'numeric')}
+            {renderInput('max_iterations', 'Número de iteraciones (n)', '7', 'numeric')}
           </>
         );
 
       case 'newton_raphson':
         return (
           <>
-            {renderInput('f', 'Función f(x)', 'x^2 - 2', 'default', true)}
-            {renderInput('f_prime', 'Derivada f\'(x)', '2*x', 'default', true)}
-            {renderInput('x0', 'Aproximación inicial (x₀)', '1.5', 'numeric')}
+            {renderInput('f', 'Ecuación f(x)', 'x^2 - 2', 'default', true)}
+            {renderInput('f_prime', "Derivada f'(x)", '2*x', 'default', true)}
+            {renderInput('x0', 'Aprox. inicial (x₀) (opcional)', '1.5', 'numeric')}
             {renderInput('tolerance', 'Tolerancia', '1e-15', 'numeric')}
-            {renderInput('max_iterations', 'Máx. iteraciones', '1000', 'numeric')}
+            {renderInput('max_iterations', 'Número de iteraciones (n)', '7', 'numeric')}
           </>
         );
 
       case 'secante':
         return (
           <>
-            {renderInput('f', 'Función f(x)', 'x^3 - 2', 'default', true)}
-            {renderInput('x0', 'Primera aproximación (x₀)', '1', 'numeric')}
-            {renderInput('x1', 'Segunda aproximación (x₁)', '2', 'numeric')}
+            {renderInput('f', 'Ecuación f(x)', 'x^3 - 2', 'default', true)}
+            {renderInput('x0', '1ra aproximación (x₀) (opcional)', '1', 'numeric')}
+            {renderInput('x1', '2da aproximación (x₁) (opcional)', '2', 'numeric')}
             {renderInput('tolerance', 'Tolerancia', '1e-10', 'numeric')}
-            {renderInput('max_iterations', 'Máx. iteraciones', '1000', 'numeric')}
+            {renderInput('max_iterations', 'Número de iteraciones (n)', '7', 'numeric')}
           </>
         );
 
@@ -113,9 +113,9 @@ const InputForm: React.FC<InputFormProps> = ({
         return (
           <>
             {renderInput('g', 'Función de iteración g(x)', 'math.cos(x)', 'default', true)}
-            {renderInput('x0', 'Aproximación inicial (x₀)', '0.5', 'numeric')}
+            {renderInput('x0', 'Aprox. inicial (x₀) (opcional)', '0.5', 'numeric')}
             {renderInput('tolerance', 'Tolerancia', '1e-10', 'numeric')}
-            {renderInput('max_iterations', 'Máx. iteraciones', '1000', 'numeric')}
+            {renderInput('max_iterations', 'Número de iteraciones (n)', '7', 'numeric')}
           </>
         );
 
@@ -126,14 +126,14 @@ const InputForm: React.FC<InputFormProps> = ({
             {renderInput('b', 'Vector b', '[7, -21]', 'default', true)}
             {renderInput('x0', 'Aproximación inicial (opcional)', '', 'default', true)}
             {renderInput('tolerance', 'Tolerancia', '1e-10', 'numeric')}
-            {renderInput('max_iterations', 'Máx. iteraciones', '1000', 'numeric')}
+            {renderInput('max_iterations', 'Número de iteraciones', '1000', 'numeric')}
           </>
         );
 
       case 'taylor':
         return (
           <>
-            {renderInput('f', 'Función f(x)', 'math.sin(x)', 'default', true)}
+            {renderInput('f', 'Ecuación f(x)', 'math.sin(x)', 'default', true)}
             {renderInput('x0', 'Centro de expansión (x₀)', '0', 'numeric')}
             {renderInput('n_terms', 'Número de términos', '5', 'numeric')}
             {renderInput('eval_x', 'Evaluar en x (opcional)', '', 'numeric')}
@@ -144,7 +144,7 @@ const InputForm: React.FC<InputFormProps> = ({
       case 'maclaurin':
         return (
           <>
-            {renderInput('f', 'Función f(x)', 'math.exp(x)', 'default', true)}
+            {renderInput('f', 'Ecuación f(x)', 'math.exp(x)', 'default', true)}
             {renderInput('n_terms', 'Número de términos', '10', 'numeric')}
             {renderInput('eval_x', 'Evaluar en x (opcional)', '1', 'numeric')}
             {renderInput('tolerance', 'Tolerancia', '1e-10', 'numeric')}

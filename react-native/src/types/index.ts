@@ -75,7 +75,7 @@ export interface ApiResponse<T> {
 // Navigation Types
 export type RootStackParamList = {
   Home: undefined;
-  Method: { method: MethodInfo };
+  Method: { method: MethodInfo; methodKey: string };
   History: undefined;
   Settings: undefined;
 };

@@ -5,7 +5,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
 import { CalculationResult, IterationData } from '../types';
 
 interface ResultDisplayProps {
@@ -26,6 +28,69 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, methodKey }) => {
     if (vec === undefined) return 'N/A';
     if (typeof vec === 'number') return vec.toFixed(6);
     return `[${vec.map(x => x.toFixed(6)).join(', ')}]`;
+  };
+
+  const renderGraph = () => {
+    if (!result.iterations || result.iterations.length < 2) return null;
+
+    // Filter to at most 15 points
+    const maxPoints = 15;
+    const step = Math.ceil(result.iterations.length / maxPoints);
+    const dataPoints = result.iterations.filter((_, i) => i % step === 0 || i === result.iterations.length - 1);
+
+    const labels = dataPoints.map(it => it.iteration.toString());
+    
+    let data: number[] = [];
+    let legend: string[] = [];
+    
+    if (methodKey === 'biseccion' || methodKey === 'newton_raphson' || methodKey === 'secante' || methodKey === 'punto_fijo') {
+      data = dataPoints.map(it => {
+         const val = methodKey === 'biseccion' ? it.c : it.x;
+         return typeof val === 'number' ? val : 0;
+      });
+      legend = ['Aproximación de Raíz (x)'];
+    } else if (methodKey === 'jacobi') {
+       data = dataPoints.map(it => typeof it.error === 'number' ? it.error : 0);
+       legend = ['Error'];
+    } else {
+       return null;
+    }
+
+    if (data.length === 0 || data.some(isNaN)) return null;
+
+    return (
+      <View style={styles.chartContainer}>
+        <Text style={styles.tableTitle}>📈 Gráfica de Convergencia</Text>
+        <LineChart
+          data={{
+            labels: labels,
+            datasets: [{ data }],
+            legend: legend
+          }}
+          width={Dimensions.get('window').width - 70}
+          height={220}
+          yAxisLabel=""
+          yAxisSuffix=""
+          yAxisInterval={1}
+          chartConfig={{
+            backgroundColor: '#ffffff',
+            backgroundGradientFrom: '#ffffff',
+            backgroundGradientTo: '#ffffff',
+            decimalPlaces: 4,
+            color: (opacity = 1) => `rgba(37, 99, 235, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(75, 85, 99, ${opacity})`,
+            style: { borderRadius: 16 },
+            propsForDots: {
+              r: '4',
+              strokeWidth: '2',
+              stroke: '#2563eb'
+            }
+          }}
+          bezier
+          style={{ marginVertical: 8, borderRadius: 16 }}
+        />
+      </View>
+    );
   };
 
   const renderResult = () => {
@@ -118,11 +183,11 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, methodKey }) => {
     const getHeaders = () => {
       switch (methodKey) {
         case 'biseccion':
-          return ['Iter', 'a', 'b', 'c', 'f(c)', 'Error'];
+          return ['Iter', 'a', 'b', 'c', 'f(c)', 'Error', 'Paso a paso'];
         case 'newton_raphson':
-          return ['Iter', 'x', 'f(x)', 'f\'(x)', 'x₊₁', 'Error'];
+          return ['Iter', 'x', 'f(x)', "f'(x)", 'x₊₁', 'Error', 'Paso a paso'];
         case 'secante':
-          return ['Iter', 'x₋₁', 'x', 'f(x)', 'x₊₁', 'Error'];
+          return ['Iter', 'x₋₁', 'x', 'f(x)', 'x₊₁', 'Error', 'Paso a paso'];
         case 'punto_fijo':
           return ['Iter', 'x', 'g(x)', 'Error'];
         case 'jacobi':
@@ -156,9 +221,15 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, methodKey }) => {
                   <>
                     <Text style={styles.tableCell}>{formatNumber(iteration.a)}</Text>
                     <Text style={styles.tableCell}>{formatNumber(iteration.b)}</Text>
-                    <Text style={styles.tableCell}>{formatNumber(iteration.c)}</Text>
-                    <Text style={styles.tableCell}>{formatNumber(iteration.fc)}</Text>
+                    <Text style={[styles.tableCell, { fontWeight: 'bold' }]}>{formatNumber(iteration.c)}</Text>
+                    <Text style={[
+                      styles.tableCell,
+                      (iteration.fc || 0) > 0 ? { color: '#dc2626', backgroundColor: '#fee2e2' } : { color: '#2563eb', backgroundColor: '#dbeafe' }
+                    ]}>
+                      {formatNumber(iteration.fc)}
+                    </Text>
                     <Text style={styles.tableCell}>{formatNumber(iteration.error)}</Text>
+                    <Text style={[styles.tableCell, styles.detailsCell]}>{iteration.details}</Text>
                   </>
                 )}
                 {methodKey === 'newton_raphson' && (
@@ -168,6 +239,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, methodKey }) => {
                     <Text style={styles.tableCell}>{formatNumber(iteration.f_prime_x)}</Text>
                     <Text style={styles.tableCell}>{formatNumber(iteration.x_new)}</Text>
                     <Text style={styles.tableCell}>{formatNumber(iteration.error)}</Text>
+                    <Text style={[styles.tableCell, styles.detailsCell]}>{iteration.details}</Text>
                   </>
                 )}
                 {methodKey === 'secante' && (
@@ -177,6 +249,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, methodKey }) => {
                     <Text style={styles.tableCell}>{formatNumber(iteration.f_x)}</Text>
                     <Text style={styles.tableCell}>{formatNumber(iteration.x_new)}</Text>
                     <Text style={styles.tableCell}>{formatNumber(iteration.error)}</Text>
+                    <Text style={[styles.tableCell, styles.detailsCell]}>{iteration.details}</Text>
                   </>
                 )}
                 {methodKey === 'punto_fijo' && (
@@ -209,6 +282,8 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, methodKey }) => {
     <View style={styles.container}>
       {renderResult()}
 
+      {renderGraph()}
+
       {result.iterations && result.iterations.length > 0 && (
         <View style={styles.iterationsSection}>
           <TouchableOpacity
@@ -240,6 +315,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  chartContainer: {
+    padding: 15,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
   },
   resultContainer: {
     padding: 20,
@@ -328,6 +409,13 @@ const styles = StyleSheet.create({
     color: '#4b5563',
     textAlign: 'center',
     fontFamily: 'monospace',
+    paddingHorizontal: 8,
+  },
+  detailsCell: {
+    minWidth: 350,
+    textAlign: 'left',
+    fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   tableHeader: {
     fontWeight: 'bold',

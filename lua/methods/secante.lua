@@ -10,6 +10,14 @@ function secante.solve(f, x0, x1, tolerance, max_iterations)
     tolerance = tolerance or utils.EPSILON
     max_iterations = max_iterations or utils.MAX_ITERATIONS
 
+    -- Autocompletar intervalo si falta
+    if not x0 or not x1 then
+        x0, x1 = utils.find_bracket(f)
+        if not x0 or not x1 then
+            return nil, "No se encontró x0 y x1 automáticamente. Ingrésalos manualmente."
+        end
+    end
+
     -- Validar parámetros
     if not utils.is_function(f) then
         return nil, "f debe ser una función"
@@ -37,6 +45,8 @@ function secante.solve(f, x0, x1, tolerance, max_iterations)
         -- Calcular siguiente aproximación
         local xn_new = xn - fxn * (xn - xn_minus_1) / (fxn - fxn_minus_1)
         local error = utils.abs(xn_new - xn)
+        
+        local details = "Se proyectó la secante desde x_{i-1}="..utils.round(xn_minus_1, 4).." hasta x_i="..utils.round(xn, 4)..". Intersección en x="..utils.round(xn_new, 4)
 
         -- Guardar iteración
         table.insert(iterations, {
@@ -45,7 +55,8 @@ function secante.solve(f, x0, x1, tolerance, max_iterations)
             x = xn,
             f_x = fxn,
             x_new = xn_new,
-            error = error
+            error = error,
+            details = details
         })
 
         -- Criterio de parada

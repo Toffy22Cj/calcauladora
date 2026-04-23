@@ -136,6 +136,7 @@ const HomeScreen: React.FC = () => {
   const handleMethodPress = (methodKey: string, methodInfo: MethodInfo) => {
     navigation.navigate('Method', {
       method: methodInfo,
+      methodKey: methodKey,
     });
   };
 

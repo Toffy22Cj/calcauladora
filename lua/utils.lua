@@ -58,4 +58,30 @@ function utils.sign_change(f, a, b)
     return fa * fb < 0
 end
 
+-- Buscar un intervalo automáticamente (para cuando a y b son opcionales)
+function utils.find_bracket(f, start_val, max_steps)
+    start_val = start_val or 0
+    max_steps = max_steps or 200
+    local step = 0.5
+    
+    local fa = f(start_val)
+    if fa == 0 then return start_val, start_val end
+    
+    -- Expandir hacia los lados
+    for i = 1, max_steps do
+        -- Lado positivo
+        local x_pos = start_val + i * step
+        if utils.sign_change(f, start_val, x_pos) then
+            return start_val, x_pos
+        end
+        -- Lado negativo
+        local x_neg = start_val - i * step
+        if utils.sign_change(f, start_val, x_neg) then
+            return x_neg, start_val
+        end
+    end
+    
+    return nil, nil
+end
+
 return utils

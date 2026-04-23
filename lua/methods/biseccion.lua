@@ -11,6 +11,14 @@ function biseccion.solve(f, a, b, tolerance, max_iterations)
     tolerance = tolerance or utils.EPSILON
     max_iterations = max_iterations or utils.MAX_ITERATIONS
 
+    -- Autocompletar intervalo si falta
+    if not a or not b then
+        a, b = utils.find_bracket(f)
+        if not a or not b then
+            return nil, "No se encontró un intervalo automáticamente. Por favor ingresa a y b manualmente."
+        end
+    end
+
     -- Validar parámetros
     local valid, error_msg = utils.validate_params(f, a, b, tolerance)
     if not valid then
@@ -19,7 +27,7 @@ function biseccion.solve(f, a, b, tolerance, max_iterations)
 
     -- Verificar cambio de signo
     if not utils.sign_change(f, a, b) then
-        return nil, "f(a) y f(b) deben tener signos opuestos"
+        return nil, "f("..a..") y f("..b..") deben tener signos opuestos"
     end
 
     -- Asegurar que a < b
@@ -36,6 +44,15 @@ function biseccion.solve(f, a, b, tolerance, max_iterations)
         -- Punto medio
         local c = (a + b) / 2
         local fc = f(c)
+        local fa = f(a)
+        
+        local sign_changed = (fa * fc < 0)
+        local details = "f(c) = " .. utils.round(fc, 6) .. ". "
+        if sign_changed then
+            details = details .. "Como f(a)*f(c) < 0, la raíz está en [a, c]. El nuevo b será c ("..utils.round(c, 4)..")."
+        else
+            details = details .. "Como f(a)*f(c) > 0, la raíz está en [c, b]. El nuevo a será c ("..utils.round(c, 4)..")."
+        end
 
         -- Guardar información de esta iteración
         table.insert(iterations, {
@@ -44,7 +61,8 @@ function biseccion.solve(f, a, b, tolerance, max_iterations)
             b = b,
             c = c,
             fc = fc,
-            error = utils.abs(b - a) / 2
+            error = utils.abs(b - a) / 2,
+            details = details
         })
 
         -- Criterio de parada
@@ -53,7 +71,7 @@ function biseccion.solve(f, a, b, tolerance, max_iterations)
         end
 
         -- Decidir próximo intervalo
-        if utils.sign_change(f, a, c) then
+        if sign_changed then
             b = c
         else
             a = c
