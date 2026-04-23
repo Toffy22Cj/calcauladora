@@ -43,6 +43,11 @@ function jacobi.solve(A, b, x0, tolerance, max_iterations)
     tolerance = tolerance or utils.EPSILON
     max_iterations = max_iterations or utils.MAX_ITERATIONS
 
+    -- Validar que A y b sean tablas (matrices/vectores)
+    if type(A) ~= "table" or type(b) ~= "table" then
+        return nil, "Por favor, ingresa A y b como arreglos/matrices JSON (ejemplo A: [[4, -1], [4, -8]], b: [7, -21]). No uses ecuaciones de texto."
+    end
+
     -- Validar que la matriz sea cuadrada
     if #A ~= #b then
         return nil, "Las dimensiones no coinciden"

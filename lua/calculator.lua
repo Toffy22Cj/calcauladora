@@ -36,13 +36,30 @@ function calculator.solve(method_name, params)
         return nil, "Método '" .. method_name .. "' no encontrado o no soporta solve()"
     end
     
-    return method.solve(
-        params.f,
-        params.a or params.x0 or params.g,
-        params.b or params.f_prime or params.x1,
-        params.tolerance,
-        params.max_iterations
-    )
+    if method_name == 'jacobi' then
+        return method.solve(
+            params.A,
+            params.b,
+            params.x0,
+            params.tolerance,
+            params.max_iterations
+        )
+    elseif method_name == 'taylor' or method_name == 'maclaurin' then
+        return method.solve(
+            params.f,
+            params.x0,
+            params.n_terms,
+            params.eval_x
+        )
+    else
+        return method.solve(
+            params.f or params.g,
+            params.a or params.x0,
+            params.b or params.f_prime or params.x1,
+            params.tolerance,
+            params.max_iterations
+        )
+    end
 end
 
 -- Información general
