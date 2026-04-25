@@ -1,0 +1,73 @@
+Para usar este código, solo necesitas seguir unos pasos sencillos. Imagina que es un asistente que te va entrevistando para dibujar el mapa de tu problema.
+
+Aquí tienes la guía paso a paso:
+
+### 1. Preparación del Entorno
+Primero, asegúrate de tener instalado Python y la librería necesaria. Abre tu terminal o consola y escribe:
+`pip install numpy matplotlib`
+
+### 2. Ejecución del Script
+Copia el código que te pasé anteriormente en un archivo (por ejemplo, `optimizador.py`) y ejecútalo. En la consola verás que el programa empieza a hacerte preguntas:
+
+* **¿Cuántas restricciones?:** Escribe el número total de líneas (fronteras) que tiene tu problema (ej. `4`).
+* **Valor de a, b y c:** El programa te pedirá los coeficientes para cada restricción una por una.
+    * Si tu restricción es $2x + 3y \leq 12$, pondrás `a=2`, `b=3`, `c=12`.
+    * Si es solo $x \leq 5$, pondrás `a=1`, `b=0`, `c=5`.
+    * Si es solo $y \leq 8$, pondrás `a=0`, `b=1`, `c=8`.
+
+### 3. Lectura del Gráfico
+Una vez termines de meter los datos, se abrirá una ventana con el gráfico:
+
+1.  **Las Líneas:** Cada color representa una de tus restricciones.
+2.  **El Área Verde (Región Factible):** Es la parte más importante. Es el espacio donde **todas** las condiciones se cumplen al mismo tiempo. Cualquier punto fuera de lo verde es una solución "prohibida".
+3.  **Los Ejes:** El programa ajusta automáticamente el tamaño de la cuadrícula para que no tengas que configurar el zoom manualmente.
+
+---
+
+### Ejemplo Práctico
+Si tienes este problema clásico:
+* $x + y \leq 10$ (Restricción de tiempo)
+* $2x + y \leq 15$ (Restricción de materia prima)
+* $x \leq 6$ (Límite de demanda de X)
+* $y \leq 8$ (Límite de demanda de Y)
+
+Al ejecutar el código, pondrías `4` restricciones y llenarías los valores. El resultado será un polígono verde rodeado por 4 líneas de colores. Los **vértices** (las esquinas) de esa área verde son los puntos donde normalmente se encuentra la solución óptima.
+
+### Un pequeño truco
+Si el gráfico se cierra muy rápido o no aparece, asegúrate de estar usándolo en un entorno que permita ventanas emergentes (como VS Code, PyCharm o directamente desde la terminal). Si usas Google Colab, el gráfico aparecerá justo debajo de la celda de código.Para usar este código, solo necesitas seguir unos pasos sencillos. Imagina que es un asistente que te va entrevistando para dibujar el mapa de tu problema.
+
+Aquí tienes la guía paso a paso:
+
+### 1. Preparación del Entorno
+Primero, asegúrate de tener instalado Python y la librería necesaria. Abre tu terminal o consola y escribe:
+`pip install numpy matplotlib`
+
+### 2. Ejecución del Script
+Copia el código que te pasé anteriormente en un archivo (por ejemplo, `optimizador.py`) y ejecútalo. En la consola verás que el programa empieza a hacerte preguntas:
+
+* **¿Cuántas restricciones?:** Escribe el número total de líneas (fronteras) que tiene tu problema (ej. `4`).
+* **Valor de a, b y c:** El programa te pedirá los coeficientes para cada restricción una por una.
+    * Si tu restricción es $2x + 3y \leq 12$, pondrás `a=2`, `b=3`, `c=12`.
+    * Si es solo $x \leq 5$, pondrás `a=1`, `b=0`, `c=5`.
+    * Si es solo $y \leq 8$, pondrás `a=0`, `b=1`, `c=8`.
+
+### 3. Lectura del Gráfico
+Una vez termines de meter los datos, se abrirá una ventana con el gráfico:
+
+1.  **Las Líneas:** Cada color representa una de tus restricciones.
+2.  **El Área Verde (Región Factible):** Es la parte más importante. Es el espacio donde **todas** las condiciones se cumplen al mismo tiempo. Cualquier punto fuera de lo verde es una solución "prohibida".
+3.  **Los Ejes:** El programa ajusta automáticamente el tamaño de la cuadrícula para que no tengas que configurar el zoom manualmente.
+
+---
+
+### Ejemplo Práctico
+Si tienes este problema clásico:
+* $x + y \leq 10$ (Restricción de tiempo)
+* $2x + y \leq 15$ (Restricción de materia prima)
+* $x \leq 6$ (Límite de demanda de X)
+* $y \leq 8$ (Límite de demanda de Y)
+
+Al ejecutar el código, pondrías `4` restricciones y llenarías los valores. El resultado será un polígono verde rodeado por 4 líneas de colores. Los **vértices** (las esquinas) de esa área verde son los puntos donde normalmente se encuentra la solución óptima.
+
+### Un pequeño truco
+Si el gráfico se cierra muy rápido o no aparece, asegúrate de estar usándolo en un entorno que permita ventanas emergentes (como VS Code, PyCharm o directamente desde la terminal). Si usas Google Colab, el gráfico aparecerá justo debajo de la celda de código.
